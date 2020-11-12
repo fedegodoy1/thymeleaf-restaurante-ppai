@@ -1,13 +1,12 @@
 package com.ppai.restaurante.controller;
 
-import com.ppai.restaurante.model.GestorFinalizarPreparacionPedido;
-import com.ppai.restaurante.model.IObservadorPreparacionPedido;
-import com.ppai.restaurante.model.PantallaDispositivoMovil;
-import com.ppai.restaurante.model.PedidosAServir;
+import com.ppai.restaurante.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/restaurante")
@@ -25,10 +24,10 @@ public class RestauranteController {
     @GetMapping("/notificaciones/pantallaMonitor/piso/{piso}")
     public String pantallaMonitor(Model model,
                                   @PathVariable int piso) {
-        IObservadorPreparacionPedido observadorDispositivoMovil =
-                gestorFinalizarPreparacionPedido.obtenerInterfazMonitor(piso);
+        List<InfoPedidosAServir> datosInterfazMonitor =
+                gestorFinalizarPreparacionPedido.obtenerDatosInterfazMonitor(piso);
 
-        model.addAttribute("listaInfoPedidosAServir",observadorDispositivoMovil.obtenerInfoPedidosListosAServir());
+        model.addAttribute("listaInfoPedidosAServir", datosInterfazMonitor);
         model.addAttribute("piso", String.format("Piso: %s",piso));
 
         return "pantallaNotificacionInterfazMonitor";
@@ -38,14 +37,14 @@ public class RestauranteController {
     public String pantallaDispositivoMovil(Model model,
                                @PathVariable String nombreMozo) {
 
-        PantallaDispositivoMovil observadorDispositivoMovil =
-                gestorFinalizarPreparacionPedido.obtenerInterfazDispositivoMovil(nombreMozo);
+        DatosInterfazDispositivoMovil datosInterfazDispositivoMovil =
+                gestorFinalizarPreparacionPedido.obtenerDatosInterfazDispositivoMovil(nombreMozo);
 
-        model.addAttribute("listaInfoPedidosAServir",observadorDispositivoMovil.obtenerInfoPedidosListosAServir());
+        model.addAttribute("listaInfoPedidosAServir",datosInterfazDispositivoMovil.getInfoPedidosAServir());
         model.addAttribute("nombreMozo", String.format("Mozo: %s",nombreMozo));
-        model.addAttribute("notificacion", observadorDispositivoMovil.isNuevoLoteIngresado());
+        model.addAttribute("notificacion", datosInterfazDispositivoMovil.isNuevoLoteIngresado());
 
-        observadorDispositivoMovil.notificacionVista();
+        gestorFinalizarPreparacionPedido.informarNotificacionVista(nombreMozo);
 
         return "pantallaNotificacionDispositivoMovil";
     }

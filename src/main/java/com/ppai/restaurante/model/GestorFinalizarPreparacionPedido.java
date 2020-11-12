@@ -63,14 +63,61 @@ public class GestorFinalizarPreparacionPedido implements ISujetoPreparacionPedid
         observadores.removeAll(observadoresABorrar);
     }
 
-    public PantallaDispositivoMovil obtenerInterfazDispositivoMovil(String nombreUsuarioMozo) {
-        return (PantallaDispositivoMovil)observadores.stream().filter(observador -> nombreUsuarioMozo.equalsIgnoreCase(observador.getNombreMozo()))
+    /**
+     * Método que obtiene los datos de la PantallaDispositivoMovil.
+     * @param nombreUsuarioMozo nombre del mozo que se encuentra asignado en el observador.
+     * @return DatosInterfazDispositivoMovil que representa los datos necesarios para llenar
+     * en la interfaz pantallaNotificacionDispositivoMovil.html.
+     * Evitando una dependencia entre el controlador y el observador.
+     */
+    public DatosInterfazDispositivoMovil obtenerDatosInterfazDispositivoMovil(String nombreUsuarioMozo) {
+        PantallaDispositivoMovil dispositivoMovil = (PantallaDispositivoMovil)obtenerInterfazDispositivoMovil(nombreUsuarioMozo);
+        DatosInterfazDispositivoMovil interfazDispositivoMovil = new DatosInterfazDispositivoMovil
+                (dispositivoMovil.obtenerInfoPedidosListosAServir(), dispositivoMovil.isNuevoLoteIngresado());
+        return interfazDispositivoMovil;
+    }
+
+    /**
+     * Método que obtiene los datos de la PantallaInterfazMonitor.
+     * @param numeroPiso numero de piso que se encuentra asignado en el observador.
+     * @return List<InfoPedidosAServir> ue representa los datos necesarios para llenar
+     * en la interfaz pantallaNotificacionInterfazMonitor.html.
+     * Evitando una dependencia entre el controlador y el observador.
+     */
+    public List<InfoPedidosAServir> obtenerDatosInterfazMonitor(Integer numeroPiso) {
+        PantallaInterfazMonitor interfazMonitor = (PantallaInterfazMonitor)obtenerInterfazMonitor(numeroPiso);
+        return interfazMonitor.obtenerInfoPedidosListosAServir();
+    }
+
+    /**
+     * Método que informa a la PantallaDispositivoMovil que la notificación fue vista en función al nombre del mozo.
+     * @param nombreUsuarioMozo nombre del mozo que se encuentra asignado en el observador.
+     */
+    public void informarNotificacionVista(String nombreUsuarioMozo) {
+        PantallaDispositivoMovil dispositivoMovil = (PantallaDispositivoMovil)obtenerInterfazDispositivoMovil(nombreUsuarioMozo);
+        dispositivoMovil.notificacionVista();
+    }
+
+    /**
+     * Método que en funcion del nombre del mozo, devuelve el observador correspondiente.
+     * @param nombreUsuarioMozo nombre del mozo que se encuentra asignado en el observador.
+     * @return PantallaDispositivoMovil asociado al nombre del mozo.
+     */
+    public IObservadorPreparacionPedido obtenerInterfazDispositivoMovil(String nombreUsuarioMozo) {
+        return observadores.stream()
+                .filter(observador -> nombreUsuarioMozo.equalsIgnoreCase(observador.getNombreMozo()))
                 .findFirst()
                 .get();
     }
 
+    /**
+     * Método que en funcion del numero de piso, devuelve el observador correspondiente.
+     * @param numeroPiso numero de piso que se encuentra asignado en el observador.
+     * @return IObservadorPreparacionPedido asociado al numero de piso.
+     */
     public IObservadorPreparacionPedido obtenerInterfazMonitor(Integer numeroPiso) {
-        return  observadores.stream().filter(observador -> numeroPiso.equals(observador.getPiso()))
+        return  observadores.stream()
+                .filter(observador -> numeroPiso.equals(observador.getPiso()))
                 .findFirst()
                 .get();
     }
@@ -79,6 +126,10 @@ public class GestorFinalizarPreparacionPedido implements ISujetoPreparacionPedid
         return detallesDePedidoEnPreparacion;
     }
 
+    /**
+     * Método que elimina los pedidos en preparacion en función a los pedidos seleccionados
+     * desde la interfaz pedidosEnPreparacion.html.
+     */
     public void quitarPedidosEnPreparacion() {
         List<DetalleDePedido> detallesAEliminar = new ArrayList<>();
         for(DetalleDePedido detalleSeleccionado : detalleDePedidosSeleccionadosAServir) {
