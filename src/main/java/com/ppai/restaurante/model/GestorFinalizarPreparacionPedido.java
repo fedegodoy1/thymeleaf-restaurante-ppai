@@ -8,13 +8,18 @@ public class GestorFinalizarPreparacionPedido implements ISujetoPreparacionPedid
     /**
      * Información que se entrega a los observadores.
      */
-    private List<DetalleDePedido> detalleDePedidosSeleccionadosAServir = new ArrayList<>();
+    private final List<DetalleDePedido> detalleDePedidosSeleccionadosAServir = new ArrayList<>();
 
     /**
      * Detalle de pedidos en preparacion.
      */
-    private List<DetalleDePedido> detallesDePedidoEnPreparacion;
+    private final List<DetalleDePedido> detallesDePedidoEnPreparacion;
 
+    /**
+     * Constructor del GestorFinalizarPreparacionPedido.
+     * @param observadorPreparacionPedido observadores que se encuentran suscriptos a las nuevas novedades.
+     * @param detallesDePedidoEnPreparacion detalles de pedido que se encuentran en preparación.
+     */
     public GestorFinalizarPreparacionPedido(List<IObservadorPreparacionPedido> observadorPreparacionPedido,
                                             List<DetalleDePedido> detallesDePedidoEnPreparacion) {
         observadores.addAll(observadorPreparacionPedido);
@@ -22,8 +27,10 @@ public class GestorFinalizarPreparacionPedido implements ISujetoPreparacionPedid
     }
 
     /**
-     * Inicializa todo el proceso
-     * @param detalleDePedidosAServir
+     * Método que inicializa el proceso de notificacion a los observadores. En donde tambien llama al metodo
+     * quitarPedidosEnPreparacion(), que se va a encargar de eliminar de la lista de pedidos en preparacion, aquellos
+     * que fueron seleccionados mediante la interfaz.
+     * @param detalleDePedidosAServir lista que representa los detalle de pedidos seleccionados.
      */
     public void publicarDetPedidoAServir(List<DetalleDePedido> detalleDePedidosAServir) {
         detalleDePedidosSeleccionadosAServir.addAll(detalleDePedidosAServir);
@@ -33,6 +40,9 @@ public class GestorFinalizarPreparacionPedido implements ISujetoPreparacionPedid
         notificar();
     }
 
+    /**
+     * Método que implementa de la interface ISujetoPreparacionPedido.
+     */
     @Override
     public void notificar() {
         // Por cada detalle de pedido seleccionado a servir, se obtiene los datos

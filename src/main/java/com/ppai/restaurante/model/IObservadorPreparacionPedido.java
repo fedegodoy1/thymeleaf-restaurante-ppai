@@ -7,4 +7,5 @@ public interface IObservadorPreparacionPedido {
     Integer getPiso();
     String getNombreMozo();
     List<InfoPedidosAServir> obtenerInfoPedidosListosAServir();
+    boolean chequeoDeDuplicados(InfoPedidosAServir info);
 }

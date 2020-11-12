@@ -3,6 +3,9 @@ package com.ppai.restaurante.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sujeto Abstracto
+ */
 public interface ISujetoPreparacionPedido {
     // Lista de observadores
     List<IObservadorPreparacionPedido> observadores = new ArrayList<>();
