@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <meta charset="UTF-8">
+    <title>Restaurante - Finalizar Preparacion Pedido</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1> Pedidos en preparación </h1>
+        </div>
+    </div>
+    <div class="row">
+        <form class="ui form" th:action="@{/restaurante/finalizarPreparacionPedido}" method="post" th:object="${pedidosAServir}">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th> Nombre del producto</th>
+                    <th> Nombre del menu</th>
+                    <th> Cantidad</th>
+                    <th> Numero/s de mesa/s</th>
+                    <th> Tiempo espera</th>
+                    <th> Seleccion</th>
+                </tr>
+                </thead>
+                <tr th:each="detalleDePedido : ${listaPedidosAServir}">
+                    <td><span th:text="${detalleDePedido.nombreProducto}"> Nombre Producto </span></td>
+                    <td><span th:text="${detalleDePedido.nombreMenu}"> Nombre Menu </span></td>
+                    <td><span th:text="${detalleDePedido.cantidad}"> Cantidad </span></td>
+                    <td><span th:text="${detalleDePedido.numeroMesa}"> Numero Mesa </span></td>
+                    <td><span th:text="${detalleDePedido.tiempoEspera}"> Tiempo Espera </span></td>
+                    <td><input type="checkbox" th:field="${pedidosAServir.detalleDePedidoList}" th:value="${detalleDePedido.id}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Finalizar
+            </button>
+            <a class="btn btn-info" href="#" th:href="@{/}"> Salir </a>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirmacion de finalizacion de pedido</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Está seguro que desea finalizar el/los pedido/s seleccionado/s?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--
+    <div class="row">
+        <a class="btn btn-info" href="#" th:href="@{/}"> Salir </a>
+    </div>
+    -->
+</div>
+</body>

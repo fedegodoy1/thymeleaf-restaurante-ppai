@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+    <meta charset="UTF-8">
+    <title>Restaurante - Pedidos listos para entregar</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h6 th:text="${piso}"></h6>
+        </div>
+    </div>
+    <fieldset class="border p-3">
+        <legend class="w-auto">Pedidos listos a servir</legend>
+        <table class="table">
+            <tbody>
+            <thead class="thead-light">
+            <tr>
+                <th>Numero Mesa</th>
+                <th>Pedido a Servir</th>
+                <th>Cantidad Producto</th>
+            </tr>
+            </thead>
+            <tr th:each="infoPedidoAServir:${listaInfoPedidosAServir}">
+                <td><span th:text="${infoPedidoAServir.numeroMesa}"> Numero Mesa </span></td>
+                <td><span th:text="${infoPedidoAServir.nombre}"> Pedido a Servir </span></td>
+                <td><span th:text="${infoPedidoAServir.productosListos}"> Cantidad Producto </span></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+</body>
+</html>
